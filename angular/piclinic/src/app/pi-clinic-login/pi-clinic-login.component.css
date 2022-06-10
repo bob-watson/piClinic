@@ -1,0 +1,14 @@
+/*
+ *	clinicLogin.php
+ */
+ div#loginDiv {
+  position:relative;
+  margin-top: 0px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 220px;
+  text-align: left;
+}
+p.piClinicButton {
+  text-align: right;
+}

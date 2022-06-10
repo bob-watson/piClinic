@@ -85,3 +85,23 @@ td.homeCityCell {
 p.familyLink {
   text-align: right;
 }
+p.piClinicPageTitle {
+  font-size: 150%;
+  font-weight: bold;
+}
+h1.piClinicPageTitle {
+  font-size: 150%;
+  font-weight: bold;
+}
+/*
+ * piClinic edit field defaults
+ */
+ label.piClinicFieldLabel {
+  font-size: 100%;
+}
+.piClinicEdit {
+  width: 202px;
+}
+p.textAlignRight {
+  text-align: right;
+}
