@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 
 import { AppComponent } from './app.component';
 import { PiClinicHeaderComponent } from './pi-clinic-header/pi-clinic-header.component';
@@ -14,7 +15,8 @@ import { PiClinicLoginComponent } from './pi-clinic-login/pi-clinic-login.compon
     PiClinicLoginComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
