@@ -1,0 +1,40 @@
+/*
+ * 	piClinic Session information
+ */
+ div#sessionMenu {
+  background-color: #558ED5;
+  margin-top: 0px;
+  font-size: 70%;
+  color: #FFF;
+  height: 15px;
+}
+div#sessionDiv {
+  float: left;
+}
+div#sessionMenu p {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+div#sessionMenu a {
+  color: #FFF;
+  text-decoration: none;
+}
+div#sessionMenu a:link {
+  color: #FFF;
+}
+div#sessionMenu a:visited {
+  color: #FFF;
+}
+div#sessionMenu a:hover {
+  color: #FFF;
+  text-decoration: underline;
+}
+div#sessionMenu a:active {
+  color: #FFF;
+  text-decoration: underline;
+}
+div#sessionPageMenu {
+  float: right;
+  text-align: right;
+  padding: 0 15px 0 0;
+}
