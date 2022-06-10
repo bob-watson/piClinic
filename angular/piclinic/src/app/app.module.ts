@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
+import { PiClinicHeaderComponent } from './pi-clinic-header/pi-clinic-header.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PiClinicHeaderComponent
   ],
   imports: [
     BrowserModule

@@ -1,1 +1,87 @@
-/* You can add global styles to this file, and also import other style files */
+/* styles used by app and all components */
+body {
+  font-family: Helvetica;
+  font-size: 14pt;
+  margin: 0 0 0 0;
+}
+pre {
+  font-family: monospace;
+  font-size: 10pt;
+}
+label {
+  font-weight: bold;
+  margin-right: 1.5em;
+  font-size: 80%
+}
+label.close {
+  margin-right: 0.5em;
+}
+div.pageBody {
+  padding-left: 20px;
+}
+div.pageBody a {
+  color: #558ED5;
+  text-decoration: none;
+}
+div.pageBody a:link {
+  color: #558ED5;
+}
+div.pageBody a:visited {
+  color: #558ED5;
+}
+div.pageBody a:hover {
+  color: #558ED5;
+  text-decoration: underline;
+}
+div.pageBody a:active {
+  color: #558ED5;
+  text-decoration: underline;
+}
+h1.pageHeading {
+  font-size: 18pt;
+  font-weight: 400;
+}
+h1.noBottomPad {
+  padding-bottom: 0;
+}
+h1.noBottomMargin {
+  margin-bottom: 0;
+}
+span.linkInHeading {
+  font-size: 10pt;
+}
+h2 {
+  font-size: 16pt;
+  margin-bottom: 10pt;
+  font-weight: normal;
+}
+.indent1 {
+  margin-left: 1.0em !important;
+}
+ul.optionList {
+  font-size: 100%;
+}
+img.searchPatientIdImage {
+  width:  80px;
+  height: auto;
+}
+table#searchResultsTable td {
+  vertical-align: top;
+  border-bottom: thin solid #bbb;
+}
+td.fullNameCell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+td.fullNameCell p {
+  margin-top: 0;
+}
+td.homeCityCell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+p.familyLink {
+  text-align: right;
+}

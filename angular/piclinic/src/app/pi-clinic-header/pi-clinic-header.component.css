@@ -1,0 +1,21 @@
+/* Styles used by the pi-clinic-header component */
+div#piClinicBannerDiv {
+  overflow: hidden;
+  background-color: #558ED5;
+  position: relative;
+  top: 0;
+  height: 70px;
+  width: 100%;
+}
+p.piClinicBannerText {
+  color: #FFFFFF;
+  font-size: 150%;
+  font-weight: bold;
+  font-style: italic;
+  padding-left: 20px;
+  background-color: #558ED5;
+}
+p.piClinicPageTitle {
+  font-size: 150%;
+  font-weight: bold;
+}
