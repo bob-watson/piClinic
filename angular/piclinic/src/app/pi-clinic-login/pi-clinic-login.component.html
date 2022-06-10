@@ -1,8 +1,14 @@
 <div id="loginDiv">
   <h1 class="piClinicPageTitle">Clinic login</h1>
-  <label class="piClinicFieldLabel" for="login_user">Username</label><br>
-  <input class="piClinicEdit" id="login_user" [(ngModel)] = "auth_user" placeholder="Username">
-  <label class="piClinicFieldLabel" for="login_pass">Password</label><br>
-  <input class="piClinicEdit" id="login_pass" type="password"  [(ngModel)]= "auth_pass" placeholder="Password">
-  <button class="piClinicButton" (click)="showLogin()">Login</button>
+  <p>
+    <label class="piClinicFieldLabel" for="login_user">Username</label><br>
+    <input class="piClinicEdit" id="login_user" [(ngModel)] = "auth_user" placeholder="Username">
+  </p>
+  <p>
+    <label class="piClinicFieldLabel" for="login_pass">Password</label><br>
+    <input class="piClinicEdit" id="login_pass" type="password"  [(ngModel)]= "auth_pass" placeholder="Password">
+  </p>
+  <p class="piClinicButton">
+    <button (click)="showLogin()">Login</button>
+  </p>
 </div>
