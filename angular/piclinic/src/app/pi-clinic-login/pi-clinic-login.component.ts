@@ -40,7 +40,9 @@ export class PiClinicLoginComponent implements OnInit {
     var url = 'https://dev.piclinic.org/api/session.php';
     var body = new post_body(this.auth_user, this.auth_pass);
 
-    this.http.post<any>(url, {"username": this.auth_user, "password": this.auth_pass }).subscribe(this.sessionInfo);
+    this.http.post<any>(url,
+      {"username": this.auth_user, "password": this.auth_pass }).subscribe(data =>
+        {this.sessionInfo = data;});
   }
 
   ngOnInit(): void {
