@@ -6,20 +6,20 @@ import { Observable } from 'rxjs';
 export class SessionService {
 
   private piClinicSessionUrl = 'https://dev.piclinic.org/api/session.php';
-  private sessionInfo = {};
 
   constructor(
     private http: HttpClient
   ) { }
 
-  public openSession(sessionUser: string, sessionPass: string) {
-    this.http.post<any>(
+  public openSession(
+      sessionUser: string,
+      sessionPass: string
+      ): Observable<any> {
+    var sessionInfo = {};
+    return this.http.post<any>(
       this.piClinicSessionUrl,
       {"username": sessionUser, "password": sessionPass }
-    ).subscribe(data =>
-      {this.sessionInfo = data;});
-
-    return this.sessionInfo;
+    );
   }
 
   public getSession (token: string) {

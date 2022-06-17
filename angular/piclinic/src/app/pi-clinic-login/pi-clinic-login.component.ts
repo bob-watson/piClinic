@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { SessionService } from '../api/session.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -15,34 +15,12 @@ export class PiClinicLoginComponent implements OnInit {
   @Output() sessionInfo = {};
 
   constructor(
-    private http: HttpClient
+    private session: SessionService
     ) { }
 
   showLogin() {
-    var  message_text: String;
-    message_text = "user: " + this.auth_user + "\n";
-    message_text += "pass: " + this.auth_pass + "\n";
-    // alert(message_text);
-    this.createNewSession();
-    // alert(JSON.stringify(this.sessionInfo, null, 2))
-  }
-
-  createNewSession() {
-    class post_body {
-      username: String;
-      password: String;
-
-      constructor(user: String, pass: String) {
-        this.username = user;
-        this.password = pass;
-      }
-    };
-    var url = 'https://dev.piclinic.org/api/session.php';
-    var body = new post_body(this.auth_user, this.auth_pass);
-
-    this.http.post<any>(url,
-      {"username": this.auth_user, "password": this.auth_pass }).subscribe(data =>
-        {this.sessionInfo = data;});
+    this.session.openSession (this.auth_user, this.auth_pass).
+      subscribe(data => this.sessionInfo = data);
   }
 
   ngOnInit(): void {

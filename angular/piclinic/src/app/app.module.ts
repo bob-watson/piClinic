@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { PiClinicHeaderComponent } from './pi-clinic-header/pi-clinic-header.component';
 import { PiClinicSessionMenuComponent } from './pi-clinic-session-menu/pi-clinic-session-menu.component';
 import { PiClinicLoginComponent } from './pi-clinic-login/pi-clinic-login.component';
+import { SessionService } from './api/session.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,9 @@ import { PiClinicLoginComponent } from './pi-clinic-login/pi-clinic-login.compon
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    SessionService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
