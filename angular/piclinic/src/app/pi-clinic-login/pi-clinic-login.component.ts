@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { SessionService } from '../api/session.service';
+import { piClinicSession } from '../api/session.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -15,7 +15,7 @@ export class PiClinicLoginComponent implements OnInit {
   @Output() sessionInfo = {};
 
   constructor(
-    private session: SessionService
+    private session: piClinicSession
     ) { }
 
   showLogin() {

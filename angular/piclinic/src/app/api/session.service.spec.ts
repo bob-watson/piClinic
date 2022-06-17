@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SessionService } from './session.service';
+import { piClinicSession } from './session.service';
 
-describe('SessionService', () => {
-  let service: SessionService;
+describe('piClinicSession', () => {
+  let service: piClinicSession;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SessionService);
+    service = TestBed.inject(piClinicSession);
   });
 
   it('should be created', () => {

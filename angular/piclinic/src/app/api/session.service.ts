@@ -3,7 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class SessionService {
+export class piClinicSession {
 
   private piClinicSessionUrl = 'https://dev.piclinic.org/api/session.php';
 
