@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { piClinicSession, sessionInfo, activeSessionInfo, apiError, httpError} from '../api/session.service';
-import { Observable, Observer } from 'rxjs';
+import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo, apiError, httpError} from '../api/session.service';
 
 @Component({
   selector: 'app-pi-clinic-login',
@@ -9,24 +8,27 @@ import { Observable, Observer } from 'rxjs';
 })
 export class PiClinicLoginComponent implements OnInit {
 
+  // UI properties
   @Input() auth_user = "";
   @Input() auth_pass = "";
 
-  @Output() currentSession: sessionInfo;
+  @Output() currentSession: currentSessionInfo;
   @Output() activeSession: activeSessionInfo;
   @Output() serviceError: httpError;
 
   constructor(
     private session: piClinicSession
-    ) {
-      this.currentSession = <sessionInfo>{};
+    )
+    {
+      this.currentSession = <currentSessionInfo>{};
       this.activeSession = <activeSessionInfo>{};
       this.serviceError = <httpError>{};
     }
 
-  loginSession(): void {
+  // Login user and create a new piClinic session
+  loginUser(): void {
     var httpObserver = {
-      next: (data: sessionInfo) => this.currentSession = data,
+      next: (data: currentSessionInfo) => this.currentSession = data,
       error: (err: httpError) => this.serviceError = err,
       complete: () => console.log ("showLogin call completed.")
     };
@@ -35,6 +37,7 @@ export class PiClinicLoginComponent implements OnInit {
       subscribe(data => this.currentSession = data);
   }
 
+  // Get current session data
   showSessionInfo(): void {
     var httpObserver = {
       next: (data: activeSessionInfo) => this.activeSession = data,
@@ -46,27 +49,52 @@ export class PiClinicLoginComponent implements OnInit {
       subscribe(httpObserver);
   }
 
+  // Change the session UI language
   changeSessionLanguage(): void {
     var newLanguage = 'en';
-    if (this.activeSession.data.sessionLanguage == 'en') {
+    var currentLang = '';
+
+    // find the current session language
+    if (Object.keys(this.activeSession).length === 0) {
+      console.log("ChangeLanguage: No active session");
+      if (Object.keys(this.currentSession).length !== 0) {
+        console.log("ChangeLanguage: Use current session");
+        currentLang = this.currentSession.data.sessionLanguage;
+      } else {
+        console.log("ChangeLanguage: no session to change");
+        // there's no session to update so leave with no further action
+        return;
+      }
+    } else {
+      console.log("ChangeLanguage: Use active session");
+      currentLang = this.activeSession.data.sessionLanguage;
+    }
+
+    // Switch to the other language (there's only two)
+    if (currentLang == 'en') {
+      console.log("ChangeLanguage: selecting en -> es");
       newLanguage = 'es';
     } else {
+      console.log("ChangeLanguage: selecting es -> en");
       newLanguage = 'en';
     }
 
+    // prepare the Observer
     var httpObserver = {
       next: (data: activeSessionInfo) => this.activeSession = data,
       error: (err: httpError) => this.serviceError = err,
       complete: () => console.log ("changeSessionLanguage call completed.")
     };
 
+    // call the piClinic API to update
     this.session.updateSession (
       this.currentSession.data.token,
       newLanguage).
       subscribe(httpObserver);
   }
 
-  logoutSession(): void {
+  // Log out the current user and delete their session
+  logoutUser(): void {
     var httpObserver = {
       next: (data: activeSessionInfo) => this.activeSession = data,
       error: (err: httpError) => this.serviceError = err,

@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+/*
+ *  Data types used by all piClinic APIs
+ *    (These might need to be refined, still)
+ */
 export type apiStatus = {
   httpResponse: number;
   httpReason: string;
@@ -30,6 +33,9 @@ export type httpError = {
   error: any
 }
 
+/*
+ *  Data types used by the session resource
+ */
 export type sessionData = {
   token: string;
   sessionIP: string;
@@ -63,6 +69,9 @@ export type activeSessionInfo = {
   status: apiStatus;
 }
 
+/*
+ *    piClinic Session API wrapper
+ */
 @Injectable()
 export class piClinicSession {
 
@@ -72,16 +81,21 @@ export class piClinicSession {
     private http: HttpClient
   ) { }
 
-  public openSession(
-    sessionUser: string,
-    sessionPass: string
+  // Create a new user session
+  public openSession (
+    sessionUser: string, // username
+    sessionPass: string  // password
     ): Observable<any> {
     return this.http.post<sessionInfo>(
       this.piClinicSessionUrl,
-      {"username": sessionUser, "password": sessionPass }
+      {
+        "username": sessionUser,
+        "password": sessionPass
+      }
     );
   }
 
+  // Get info about an open user session
   public getSession (
     token: string
     ) : Observable<any> {
@@ -92,6 +106,7 @@ export class piClinicSession {
     );
   }
 
+  // Change the UI language of an open session
   public updateSession (
     token: string,
     newLanguage: string
@@ -102,8 +117,9 @@ export class piClinicSession {
         {"sessionLanguage": newLanguage},
         {"headers": patchHeaders}
       );
-
   }
+
+  // Log the user out and close the session
   public closeSession (
     token: string
     ) : Observable<any> {
@@ -113,5 +129,4 @@ export class piClinicSession {
       {"headers": getHeaders}
     );
   }
-
 }
