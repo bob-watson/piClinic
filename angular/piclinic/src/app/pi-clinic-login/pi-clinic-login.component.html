@@ -9,13 +9,21 @@
     <input class="piClinicEdit" id="login_pass" type="password"  [(ngModel)]= "auth_pass" placeholder="Password">
   </p>
   <p class="piClinicButton">
-    <button (click)="showLogin()">Login</button>
+    <button (click)="loginSession()">Login</button>
   </p>
 </div>
 <div style="clear: both;">
+  <h2>Login response</h2>
   <pre style="font-family: monospace">Response: {{currentSession | json}}</pre>
 </div>
 <div style="clear: both;">
-  <button (click)="showSessionInfo()">Show session info</button>
+  <h2>Updates</h2>
+  <button (click)="showSessionInfo()">Show session info</button>&nbsp;
+  <button (click)="changeSessionLanguage()">Change session language</button>&nbsp;
+  <button (click)="logoutSession()">Logout</button>
   <pre style="font-family: monospace">Response: {{activeSession | json}}</pre>
+</div>
+<div>
+  <h2>Last error</h2>
+  <pre style="font-family: monospace">Error: {{serviceError | json}}</pre>
 </div>

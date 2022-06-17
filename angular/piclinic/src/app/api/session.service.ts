@@ -7,6 +7,29 @@ export type apiStatus = {
   httpReason: string;
 }
 
+export type apiError = {
+  count: number;
+  data: sessionData;
+  status: apiStatus;
+}
+
+export type httpErrorHeaders = {
+  normalizedNames: any,
+  lazyUpdate: any,
+  headers: any
+}
+
+export type httpError = {
+  headers: httpErrorHeaders,
+  status: number,
+  statusText: string,
+  url: string,
+  ok: boolean,
+  name: string,
+  message: string,
+  error: any
+}
+
 export type sessionData = {
   token: string;
   sessionIP: string;
@@ -69,11 +92,26 @@ export class piClinicSession {
     );
   }
 
-  public updateSession (token: string, language: string) {
+  public updateSession (
+    token: string,
+    newLanguage: string
+    ) : Observable<any> {
+      var patchHeaders = {"X-piClinic-token": token};
+      return this.http.patch<activeSessionInfo>(
+        this.piClinicSessionUrl,
+        {"sessionLanguage": newLanguage},
+        {"headers": patchHeaders}
+      );
 
   }
-  public closeSession (token: string) {
-
+  public closeSession (
+    token: string
+    ) : Observable<any> {
+    var getHeaders = {"X-piClinic-token": token};
+    return this.http.delete<activeSessionInfo>(
+      this.piClinicSessionUrl,
+      {"headers": getHeaders}
+    );
   }
 
 }
