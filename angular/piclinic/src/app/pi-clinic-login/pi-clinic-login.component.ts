@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { piClinicSession, sessionInfo } from '../api/session.service';
+import { piClinicSession, sessionInfo, activeSessionInfo} from '../api/session.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,16 +13,23 @@ export class PiClinicLoginComponent implements OnInit {
   @Input() auth_pass = "";
 
   @Output() currentSession: sessionInfo;
+  @Output() activeSession: activeSessionInfo;
 
   constructor(
     private session: piClinicSession
     ) {
       this.currentSession = <sessionInfo>{};
+      this.activeSession = <activeSessionInfo>{};
     }
 
   showLogin() {
     this.session.openSession (this.auth_user, this.auth_pass).
       subscribe(data => this.currentSession = data);
+  }
+
+  showSessionInfo() {
+    this.session.getSession (this.currentSession.data.token).
+      subscribe(data => this.activeSession = data);
   }
 
   ngOnInit(): void {

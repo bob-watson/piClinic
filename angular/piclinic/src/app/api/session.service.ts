@@ -21,9 +21,23 @@ export type sessionData = {
 }
 
 export type sessionInfo = {
-    count: number;
-    data: sessionData;
-    status: apiStatus;
+  count: number;
+  data: sessionData;
+  status: apiStatus;
+}
+
+export type activeSessionData = {
+  token: string;
+  username: string;
+  accessGranted: string;
+  sessionLanguage: string;
+  sessionClinicPublicID: string;
+}
+
+export type activeSessionInfo = {
+  count: number;
+  data: activeSessionData;
+  status: apiStatus;
 }
 
 @Injectable()
@@ -36,19 +50,25 @@ export class piClinicSession {
   ) { }
 
   public openSession(
-      sessionUser: string,
-      sessionPass: string
-      ): Observable<any> {
-    var sessionInfo = {};
+    sessionUser: string,
+    sessionPass: string
+    ): Observable<any> {
     return this.http.post<sessionInfo>(
       this.piClinicSessionUrl,
       {"username": sessionUser, "password": sessionPass }
     );
   }
 
-  public getSession (token: string) {
-
+  public getSession (
+    token: string
+    ) : Observable<any> {
+    var getHeaders = {"X-piClinic-token": token};
+    return this.http.get<activeSessionInfo>(
+      this.piClinicSessionUrl,
+      {"headers": getHeaders}
+    );
   }
+
   public updateSession (token: string, language: string) {
 
   }
