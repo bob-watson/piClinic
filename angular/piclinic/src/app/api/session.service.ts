@@ -2,6 +2,30 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export type apiStatus = {
+  httpResponse: number;
+  httpReason: string;
+}
+
+export type sessionData = {
+  token: string;
+  sessionIP: string;
+  sessionUA: string;
+  username: string;
+  loggedIn: number;
+  accessGranted: string;
+  sessionLanguage: string;
+  sessionClinicPublicID: string;
+  createdDate: string;
+  expiresOnDate: string;
+}
+
+export type sessionInfo = {
+    count: number;
+    data: sessionData;
+    status: apiStatus;
+}
+
 @Injectable()
 export class piClinicSession {
 
@@ -16,7 +40,7 @@ export class piClinicSession {
       sessionPass: string
       ): Observable<any> {
     var sessionInfo = {};
-    return this.http.post<any>(
+    return this.http.post<sessionInfo>(
       this.piClinicSessionUrl,
       {"username": sessionUser, "password": sessionPass }
     );
