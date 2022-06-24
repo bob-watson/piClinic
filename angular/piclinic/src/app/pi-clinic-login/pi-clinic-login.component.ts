@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo } from '../api/session.service';
+import { PiClinicErrorMessageComponent } from '../pi-clinic-error-message/pi-clinic-error-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -17,6 +18,8 @@ export class PiClinicLoginComponent implements OnInit {
   @Output() activeSession: activeSessionInfo;
   @Output() serviceError: HttpErrorResponse;
 
+  @Output() errorMessage: string;
+
   constructor(
     private session: piClinicSession
     )
@@ -24,13 +27,14 @@ export class PiClinicLoginComponent implements OnInit {
       this.currentSession = <currentSessionInfo>{};
       this.activeSession = <activeSessionInfo>{};
       this.serviceError = <HttpErrorResponse>{};
+      this.errorMessage = "Login message";
     }
 
     // Login user and create a new piClinic session
   loginUser(): void {
     var httpObserver = {
       next: (data: currentSessionInfo) => this.currentSession = data,
-      error: (err: HttpErrorResponse) => this.serviceError = err,
+      error: (err: HttpErrorResponse) => this.loginUserError(err),
       complete: () => console.log ("showLogin call completed.")
     };
 
@@ -129,6 +133,17 @@ export class PiClinicLoginComponent implements OnInit {
 
   clearLastError(): void {
     this.serviceError = <HttpErrorResponse>{};
+  }
+
+  loginUserError(err: HttpErrorResponse): void {
+    this.serviceError = err;
+    // look up error message returned
+    if (!err.hasOwnProperty('error')) return;
+    if (!err.error.hasOwnProperty('status')) return;
+    if (err.error.status.hasOwnProperty('httpReason')) {
+      this.errorMessage = err.error.status.httpReason;
+    }
+    return;
   }
 
   ngOnInit(): void {

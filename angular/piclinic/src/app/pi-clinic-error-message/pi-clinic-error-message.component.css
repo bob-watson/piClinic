@@ -1,0 +1,15 @@
+/*
+ *  piClinic error message display\
+ */
+ div.errorMessage {
+  padding-left:1.0em;
+  font-size:100%;
+  color: #000;
+  overflow: hidden;
+  background-color: #fbb;
+  position: relative;
+  width: 100%;
+}
+div.errorMessage  p {
+  margin: 10px 0 10px 0;
+}

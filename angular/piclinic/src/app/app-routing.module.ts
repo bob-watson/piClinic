@@ -4,7 +4,7 @@ import { PiClinicLoginComponent } from './pi-clinic-login/pi-clinic-login.compon
 import { PiClinicDashComponent } from './pi-clinic-dash/pi-clinic-dash.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'https://piclinic.org/', pathMatch: 'full'},
+  // { path: '', redirectTo: 'https://piclinic.org/', pathMatch: 'full'},
   { path: 'clinicLogin', component: PiClinicLoginComponent },
   { path: 'clinicDash', component: PiClinicDashComponent }
 ];
