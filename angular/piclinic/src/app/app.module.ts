@@ -8,18 +8,22 @@ import { PiClinicHeaderComponent } from './pi-clinic-header/pi-clinic-header.com
 import { PiClinicSessionMenuComponent } from './pi-clinic-session-menu/pi-clinic-session-menu.component';
 import { PiClinicLoginComponent } from './pi-clinic-login/pi-clinic-login.component';
 import { piClinicSession } from './api/session.service';
+import { AppRoutingModule } from './app-routing.module';
+import { PiClinicDashComponent } from './pi-clinic-dash/pi-clinic-dash.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PiClinicHeaderComponent,
     PiClinicSessionMenuComponent,
-    PiClinicLoginComponent
+    PiClinicLoginComponent,
+    PiClinicDashComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [
     piClinicSession
