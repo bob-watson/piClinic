@@ -127,7 +127,7 @@ export class PiClinicLoginComponent implements OnInit {
     }
   }
 
-  clearError(): void {
+  clearLastError(): void {
     this.serviceError = <HttpErrorResponse>{};
   }
 
