@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo, apiError, httpError} from '../api/session.service';
+import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo } from '../api/session.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-pi-clinic-login',
@@ -14,7 +15,7 @@ export class PiClinicLoginComponent implements OnInit {
 
   @Output() currentSession: currentSessionInfo;
   @Output() activeSession: activeSessionInfo;
-  @Output() serviceError: httpError;
+  @Output() serviceError: HttpErrorResponse;
 
   constructor(
     private session: piClinicSession
@@ -22,26 +23,26 @@ export class PiClinicLoginComponent implements OnInit {
     {
       this.currentSession = <currentSessionInfo>{};
       this.activeSession = <activeSessionInfo>{};
-      this.serviceError = <httpError>{};
+      this.serviceError = <HttpErrorResponse>{};
     }
 
-  // Login user and create a new piClinic session
+    // Login user and create a new piClinic session
   loginUser(): void {
     var httpObserver = {
       next: (data: currentSessionInfo) => this.currentSession = data,
-      error: (err: httpError) => this.serviceError = err,
+      error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("showLogin call completed.")
     };
 
     this.session.openSession (this.auth_user, this.auth_pass).
-      subscribe(data => this.currentSession = data);
+      subscribe(httpObserver);
   }
 
   // Get current session data
   showSessionInfo(): void {
     var httpObserver = {
       next: (data: activeSessionInfo) => this.activeSession = data,
-      error: (err: httpError) => this.serviceError = err,
+      error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("showSessionInfo call completed.")
     };
 
@@ -82,7 +83,7 @@ export class PiClinicLoginComponent implements OnInit {
     // prepare the Observer
     var httpObserver = {
       next: (data: activeSessionInfo) => this.activeSession = data,
-      error: (err: httpError) => this.serviceError = err,
+      error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("changeSessionLanguage call completed.")
     };
 
@@ -96,13 +97,38 @@ export class PiClinicLoginComponent implements OnInit {
   // Log out the current user and delete their session
   logoutUser(): void {
     var httpObserver = {
-      next: (data: activeSessionInfo) => this.activeSession = data,
-      error: (err: httpError) => this.serviceError = err,
+      next: (data: activeSessionInfo) => {this.activeSession = data; this.currentSession = <currentSessionInfo>{}; },
+      error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("logoutSession call completed.")
     };
 
     this.session.closeSession (this.currentSession.data.token).
       subscribe(httpObserver);
+  }
+
+  // test to return whether there's a current session
+  validSession(): boolean {
+    if (this.currentSession.hasOwnProperty('data')) {
+        if (this.currentSession.data.hasOwnProperty('token')) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+  }
+
+  errorDataPresent(): boolean {
+    if (this.serviceError.hasOwnProperty('status')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  clearError(): void {
+    this.serviceError = <HttpErrorResponse>{};
   }
 
   ngOnInit(): void {

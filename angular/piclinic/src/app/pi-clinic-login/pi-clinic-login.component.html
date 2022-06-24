@@ -16,7 +16,7 @@
   <h2>Login response</h2>
   <pre style="font-family: monospace">Response: {{currentSession | json}}</pre>
 </div>
-<div style="clear: both;">
+<div [ngClass]="{ 'noshow': !validSession() }" style="clear: both;">
   <h2>Updates</h2>
   <button (click)="showSessionInfo()">Show session info</button>&nbsp;
   <button (click)="changeSessionLanguage()">Change session language</button>&nbsp;
@@ -25,5 +25,6 @@
 </div>
 <div>
   <h2>Last error</h2>
+  <button [ngClass]="{ 'noshow': !errorDataPresent() }" (click)="clearError()">Clear error</button>
   <pre style="font-family: monospace">Error: {{serviceError | json}}</pre>
 </div>

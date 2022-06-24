@@ -22,6 +22,7 @@ export type httpErrorHeaders = {
   headers: any
 }
 
+/*
 export type httpError = {
   headers: httpErrorHeaders,
   status: number,
@@ -32,6 +33,7 @@ export type httpError = {
   message: string,
   error: any
 }
+*/
 
 /*
  *  Data types used by the session resource
