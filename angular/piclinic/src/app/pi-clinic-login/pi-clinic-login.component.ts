@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo } from '../api/session.service';
 import { PiClinicErrorMessageComponent } from '../pi-clinic-error-message/pi-clinic-error-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AppRoutingModule } from '../../app/app-routing.module';
+import { NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-pi-clinic-login',
@@ -21,19 +24,36 @@ export class PiClinicLoginComponent implements OnInit {
   @Output() errorMessage: string;
 
   constructor(
-    private session: piClinicSession
+    private session: piClinicSession,
+    private router: Router
     )
     {
       this.currentSession = <currentSessionInfo>{};
       this.activeSession = <activeSessionInfo>{};
       this.serviceError = <HttpErrorResponse>{};
-      this.errorMessage = "Login message";
+      this.errorMessage = "";
     }
 
-    // Login user and create a new piClinic session
+  loginSuccess(data: currentSessionInfo): void {
+    this.currentSession = data;
+    this.router.navigate(['clinicDash']);
+  }
+
+  loginUserError(err: HttpErrorResponse): void {
+    this.serviceError = err;
+    // look up error message returned
+    if (!err.hasOwnProperty('error')) return;
+    if (!err.error.hasOwnProperty('status')) return;
+    if (err.error.status.hasOwnProperty('httpReason')) {
+      this.errorMessage = err.error.status.httpReason;
+    }
+    return;
+  }
+
+  // Login user and create a new piClinic session
   loginUser(): void {
     var httpObserver = {
-      next: (data: currentSessionInfo) => this.currentSession = data,
+      next: (data: currentSessionInfo) => this.loginSuccess(data),
       error: (err: HttpErrorResponse) => this.loginUserError(err),
       complete: () => console.log ("showLogin call completed.")
     };
@@ -133,17 +153,6 @@ export class PiClinicLoginComponent implements OnInit {
 
   clearLastError(): void {
     this.serviceError = <HttpErrorResponse>{};
-  }
-
-  loginUserError(err: HttpErrorResponse): void {
-    this.serviceError = err;
-    // look up error message returned
-    if (!err.hasOwnProperty('error')) return;
-    if (!err.error.hasOwnProperty('status')) return;
-    if (err.error.status.hasOwnProperty('httpReason')) {
-      this.errorMessage = err.error.status.httpReason;
-    }
-    return;
   }
 
   ngOnInit(): void {

@@ -5,8 +5,16 @@ import { PiClinicDashComponent } from './pi-clinic-dash/pi-clinic-dash.component
 
 const routes: Routes = [
   // { path: '', redirectTo: 'https://piclinic.org/', pathMatch: 'full'},
-  { path: 'clinicLogin', component: PiClinicLoginComponent },
-  { path: 'clinicDash', component: PiClinicDashComponent }
+  {
+    path: 'clinicLogin',
+    title: 'Clinic login - piClinic',
+    component: PiClinicLoginComponent
+  },
+  {
+    path: 'clinicDash',
+    title: 'Clinic dashboard - piClinic',
+    component: PiClinicDashComponent
+  }
 ];
 
 @NgModule({
