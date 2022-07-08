@@ -1,4 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
+import { AppModule } from 'app/app.module';
 
 @Component({
   selector: 'app-pi-clinic-session-menu',
@@ -12,7 +13,9 @@ export class PiClinicSessionMenuComponent implements OnInit {
   @Output() userEditPrompt = 'User settings';
   @Output() logoutLink = 'Logout';
 
-  constructor() { }
+  constructor(
+    public app: AppModule
+  ) { }
 
   ngOnInit(): void {
   }

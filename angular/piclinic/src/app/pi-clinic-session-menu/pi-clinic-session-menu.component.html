@@ -1,5 +1,5 @@
 <div id="sessionMenu" class="noprint">
-  <div id="sessionDiv" class="noprint">
+  <div id="sessionDiv" [ngClass]="{ 'noshow': !app.validSession() }">
     <p>Logged in as:
       {{username}}
       <span [innerHTML]=itemSeparator></span>
