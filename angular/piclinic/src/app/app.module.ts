@@ -54,6 +54,12 @@ export class AppModule {
     this.appSession = newSession;
   }
 
+  public updateSessionLanguage(
+    newLang: string
+  ) : void {
+    this.appSession.sessionLanguage = newLang;
+  }
+
   public navigateToLoginPage(
   ) : void {
     this.router.navigate(['clinicLogin']);

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AppModule } from 'app/app.module';
-import { piClinicSession, sessionData, sessionInfo, activeSessionInfo } from '../api/session.service';
+import { piClinicSession, sessionData, sessionResponse, activeSessionResponse } from '../api/session.service';
 import { PiClinicErrorMessageComponent } from '../pi-clinic-error-message/pi-clinic-error-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ export class PiClinicLoginComponent implements OnInit {
   @Input() auth_user = "";
   @Input() auth_pass = "";
 
-  @Output() activeSession: activeSessionInfo;
+  @Output() activeSession: activeSessionResponse;
   @Output() serviceError: HttpErrorResponse;
 
   @Output() errorMessage: string;
@@ -29,14 +29,18 @@ export class PiClinicLoginComponent implements OnInit {
     public app: AppModule
     )
     {
-      this.activeSession = <activeSessionInfo>{};
+      this.activeSession = <activeSessionResponse>{};
       this.serviceError = <HttpErrorResponse>{};
       this.errorMessage = "";
     }
 
-  loginSuccess(sessionInfo: sessionInfo): void {
+  navigateToNextPage(
+  ) : void {
+    this.router.navigate(['clinicDash']);
+  }
+  loginSuccess(sessionInfo: sessionResponse): void {
     this.app.setSession (sessionInfo.data);
-    // this.router.navigate(['clinicDash']);
+    //   this.navigateToNextPage();
   }
 
   loginUserError(err: HttpErrorResponse): void {
@@ -53,7 +57,7 @@ export class PiClinicLoginComponent implements OnInit {
   // Login user and create a new piClinic session
   loginUser(): void {
     var httpObserver = {
-      next: (data: sessionInfo) => this.loginSuccess(data),
+      next: (data: sessionResponse) => this.loginSuccess(data),
       error: (err: HttpErrorResponse) => this.loginUserError(err),
       complete: () => console.log ("showLogin call completed.")
     };
@@ -65,7 +69,7 @@ export class PiClinicLoginComponent implements OnInit {
   // Get current session data
   showSessionInfo(): void {
     var httpObserver = {
-      next: (data: activeSessionInfo) => this.activeSession = data,
+      next: (data: activeSessionResponse) => this.activeSession = data,
       error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("showSessionInfo call completed.")
     };
@@ -100,7 +104,7 @@ export class PiClinicLoginComponent implements OnInit {
 
     // prepare the Observer
     var httpObserver = {
-      next: (data: activeSessionInfo) => this.activeSession = data,
+      next: (response: activeSessionResponse) => this.updateSuccess(response),
       error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("changeSessionLanguage call completed.")
     };
@@ -112,17 +116,24 @@ export class PiClinicLoginComponent implements OnInit {
       subscribe(httpObserver);
   }
 
+  updateSuccess(
+    response: activeSessionResponse
+  ) : void {
+    this.app.updateSessionLanguage(response.data.sessionLanguage)
+    this.activeSession = response;
+  }
+
   logoutSuccess(
-    closedSession: activeSessionInfo
+    closedSession: activeSessionResponse
   ) : void {
     this.app.setSession (<sessionData>{});
-    this.activeSession = <activeSessionInfo>{};
+    this.activeSession = <activeSessionResponse>{};
   }
 
   // Log out the current user and delete their session
   logoutUser(): void {
     var httpObserver = {
-      next: (data: activeSessionInfo) => this.logoutSuccess(data),
+      next: (data: activeSessionResponse) => this.logoutSuccess(data),
       error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("logoutSession call completed.")
     };

@@ -10,7 +10,7 @@ export type apiStatus = {
   httpReason: string;
 }
 
-export type apiError = {
+export type apiErrorResponse = {
   count: number;
   data: sessionData;
   status: apiStatus;
@@ -51,7 +51,7 @@ export type sessionData = {
   expiresOnDate: string;
 }
 
-export type sessionInfo = {
+export type sessionResponse = {
   count: number;
   data: sessionData;
   status: apiStatus;
@@ -65,7 +65,7 @@ export type activeSessionData = {
   sessionClinicPublicID: string;
 }
 
-export type activeSessionInfo = {
+export type activeSessionResponse = {
   count: number;
   data: activeSessionData;
   status: apiStatus;
@@ -88,7 +88,7 @@ export class piClinicSession {
     sessionUser: string, // username
     sessionPass: string  // password
     ): Observable<any> {
-    return this.http.post<sessionInfo>(
+    return this.http.post<sessionResponse>(
       this.piClinicSessionUrl,
       {
         "username": sessionUser,
@@ -102,7 +102,7 @@ export class piClinicSession {
     token: string
     ) : Observable<any> {
     var getHeaders = {"X-piClinic-token": token};
-    return this.http.get<activeSessionInfo>(
+    return this.http.get<activeSessionResponse>(
       this.piClinicSessionUrl,
       {"headers": getHeaders}
     );
@@ -114,7 +114,7 @@ export class piClinicSession {
     newLanguage: string
     ) : Observable<any> {
       var patchHeaders = {"X-piClinic-token": token};
-      return this.http.patch<activeSessionInfo>(
+      return this.http.patch<activeSessionResponse>(
         this.piClinicSessionUrl,
         {"sessionLanguage": newLanguage},
         {"headers": patchHeaders}
@@ -126,7 +126,7 @@ export class piClinicSession {
     token: string
     ) : Observable<any> {
     var getHeaders = {"X-piClinic-token": token};
-    return this.http.delete<activeSessionInfo>(
+    return this.http.delete<activeSessionResponse>(
       this.piClinicSessionUrl,
       {"headers": getHeaders}
     );

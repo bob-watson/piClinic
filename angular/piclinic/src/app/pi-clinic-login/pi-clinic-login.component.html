@@ -17,6 +17,7 @@
   <div style="clear: both;">
     <h2>Login response</h2>
     <pre style="font-family: monospace">Response: {{app.getSession() | json}}</pre>
+    <button [ngClass]="{ 'noshow': !app.validSession() }" (click)="navigateToNextPage()">Go to next page</button>
   </div>
   <div [ngClass]="{ 'noshow': !app.validSession() }" style="clear: both;">
     <h2>Updates</h2>
