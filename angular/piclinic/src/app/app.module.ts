@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { PiClinicHeaderComponent } from './pi-clinic-header/pi-clinic-header.component';
 import { PiClinicSessionMenuComponent } from './pi-clinic-session-menu/pi-clinic-session-menu.component';
 import { PiClinicLoginComponent } from './pi-clinic-login/pi-clinic-login.component';
-import { piClinicSession } from './api/session.service';
+import { piClinicSession, sessionData } from './api/session.service';
 import { AppRoutingModule } from './app-routing.module';
 import { PiClinicDashComponent } from './pi-clinic-dash/pi-clinic-dash.component';
 import { PiClinicErrorMessageComponent } from './pi-clinic-error-message/pi-clinic-error-message.component';
@@ -34,4 +34,29 @@ import { PiClinicAppMenuComponent } from './pi-clinic-app-menu/pi-clinic-app-men
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  private appSession: sessionData;
+
+  constructor() {
+    this.appSession = <sessionData>{};
+  }
+
+  public getSession(): sessionData {
+    return this.appSession;
+  }
+
+  public setSession(
+    newSession: sessionData
+  ) : void {
+    this.appSession = newSession;
+  }
+
+  // test to return whether there's a current session
+  validSession(): boolean {
+    if (this.appSession.hasOwnProperty('token')) {
+        return true;
+    } else {
+      return false;
+    }
+  }
+}

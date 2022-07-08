@@ -2,3 +2,12 @@
 <div class="pageBody">
   <p>pi-clinic-dash works!</p>
 </div>
+<div id="debugDiv">
+  <div style="clear: both;">
+    <h2>Login response</h2>
+    <pre style="font-family: monospace">Response: {{app.getSession() | json}}</pre>
+  </div>
+  <div [ngClass]="{ 'noshow': !app.validSession() }" style="clear: both;">
+    <pre style="font-family: monospace">Session: {{app.getSession() | json}}</pre>
+  </div>
+</div>

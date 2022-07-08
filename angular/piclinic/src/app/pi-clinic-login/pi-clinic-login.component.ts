@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo } from '../api/session.service';
+import { AppModule } from 'app/app.module';
+import { piClinicSession, sessionData, sessionInfo as currentSessionInfo, activeSessionInfo } from '../api/session.service';
 import { PiClinicErrorMessageComponent } from '../pi-clinic-error-message/pi-clinic-error-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -25,7 +26,8 @@ export class PiClinicLoginComponent implements OnInit {
 
   constructor(
     private session: piClinicSession,
-    private router: Router
+    private router: Router,
+    public app: AppModule
     )
     {
       this.currentSession = <currentSessionInfo>{};
@@ -34,8 +36,9 @@ export class PiClinicLoginComponent implements OnInit {
       this.errorMessage = "";
     }
 
-  loginSuccess(data: currentSessionInfo): void {
-    this.currentSession = data;
+  loginSuccess(sessionInfo: currentSessionInfo): void {
+    this.currentSession = sessionInfo;
+    this.app.setSession (sessionInfo.data);
     this.router.navigate(['clinicDash']);
   }
 
@@ -118,29 +121,24 @@ export class PiClinicLoginComponent implements OnInit {
       subscribe(httpObserver);
   }
 
+  logoutSuccess(
+    closedSession: activeSessionInfo
+  ) : void {
+    this.activeSession = closedSession;
+    this.currentSession = <currentSessionInfo>{};
+    this.app.setSession (<sessionData>{});
+  }
+
   // Log out the current user and delete their session
   logoutUser(): void {
     var httpObserver = {
-      next: (data: activeSessionInfo) => {this.activeSession = data; this.currentSession = <currentSessionInfo>{}; },
+      next: (data: activeSessionInfo) => this.logoutSuccess(data),
       error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("logoutSession call completed.")
     };
 
     this.session.closeSession (this.currentSession.data.token).
       subscribe(httpObserver);
-  }
-
-  // test to return whether there's a current session
-  validSession(): boolean {
-    if (this.currentSession.hasOwnProperty('data')) {
-        if (this.currentSession.data.hasOwnProperty('token')) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
   }
 
   errorDataPresent(): boolean {

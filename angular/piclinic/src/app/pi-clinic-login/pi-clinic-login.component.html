@@ -18,7 +18,7 @@
     <h2>Login response</h2>
     <pre style="font-family: monospace">Response: {{currentSession | json}}</pre>
   </div>
-  <div [ngClass]="{ 'noshow': !validSession() }" style="clear: both;">
+  <div [ngClass]="{ 'noshow': !app.validSession() }" style="clear: both;">
     <h2>Updates</h2>
     <button (click)="showSessionInfo()">Show session info</button>&nbsp;
     <button (click)="changeSessionLanguage()">Change session language</button>&nbsp;
