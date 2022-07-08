@@ -1,0 +1,71 @@
+div#topLinkMenuDiv {
+  background-color: #FFF;
+  font-size: 90%;
+}
+div#appMenu {
+  float: left;
+}
+div#commentMenu {
+  float: right;
+  text-align: right;
+  padding: 5px 15px 0 10px;
+}
+div#commentMenu a {
+  color: #558ED5;
+  text-decoration: none;
+}
+div#commentMenu a:link {
+  color: #558ED5;
+}
+div#commentMenu a:visited {
+  color: #558ED5;
+}
+div#commentMenu a:hover {
+  color: #558ED5;
+  text-decoration: underline;
+}
+div#commentMenu a:active {
+  color: #558ED5;
+  text-decoration: underline;
+}
+ul.topLinkMenuList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #FFF;
+}
+ul.topLinkMenuList li {
+  margin: 0 0px 0 10px;
+  padding: 5px 0px 0 10px;
+  float: left;
+  border-left: 1px solid #000;
+}
+ul.topLinkMenuList li.currentPage {
+  color: #000;
+}
+ul.topLinkMenuList li.firstLink {
+  border-left: none;
+}
+ul.topLinkMenuList li a {
+  color: #558ED5;
+  text-decoration: none;
+}
+ul.topLinkMenuList li a:link {
+  color: #558ED5;
+}
+ul.topLinkMenuList li a:visited {
+  color: #558ED5;
+}
+ul.topLinkMenuList li a:hover {
+  color: #558ED5;
+  text-decoration: underline;
+}
+ul.topLinkMenuList li a:active {
+  color: #558ED5;
+  text-decoration: underline;
+}
+li.separated {
+  padding-top: 12px;
+  border-top: 1px solid #777;
+}

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PiClinicAppMenuComponent } from '../pi-clinic-app-menu/pi-clinic-app-menu.component';
 
 @Component({
   selector: 'app-pi-clinic-dash',
