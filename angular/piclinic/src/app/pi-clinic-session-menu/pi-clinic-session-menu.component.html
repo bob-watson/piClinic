@@ -1,7 +1,7 @@
 <div id="sessionMenu" class="noprint">
   <div id="sessionDiv" [ngClass]="{ 'noshow': !app.validSession() }">
     <p>Logged in as:
-      {{username}}
+      {{app.getSession().username}}
       <span [innerHTML]=itemSeparator></span>
       <a href="#">{{userEditPrompt}}</a>
       <span [innerHTML]=itemSeparator></span>

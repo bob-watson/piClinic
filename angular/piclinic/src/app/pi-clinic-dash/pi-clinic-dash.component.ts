@@ -14,6 +14,11 @@ export class PiClinicDashComponent implements OnInit {
     public app: AppModule
   ) { }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void {
+    // If there's no valid session, redirect to the login page
+    if (!this.app.validSession()) {
+      this.app.navigateToLoginPage();
+    }
+  }
 
 }

@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { PiClinicDashComponent } from './pi-clinic-dash/pi-clinic-dash.component';
 import { PiClinicErrorMessageComponent } from './pi-clinic-error-message/pi-clinic-error-message.component';
 import { PiClinicAppMenuComponent } from './pi-clinic-app-menu/pi-clinic-app-menu.component';
+import { Router } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,9 @@ import { PiClinicAppMenuComponent } from './pi-clinic-app-menu/pi-clinic-app-men
 export class AppModule {
   private appSession: sessionData;
 
-  constructor() {
+  constructor(
+    private router: Router
+  ) {
     this.appSession = <sessionData>{};
   }
 
@@ -51,8 +54,13 @@ export class AppModule {
     this.appSession = newSession;
   }
 
+  public navigateToLoginPage(
+  ) : void {
+    this.router.navigate(['clinicLogin']);
+  }
+
   // test to return whether there's a current session
-  validSession(): boolean {
+  public validSession(): boolean {
     if (this.appSession.hasOwnProperty('token')) {
         return true;
     } else {
