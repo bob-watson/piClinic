@@ -59,7 +59,7 @@ export class AppModule {
     this.router.navigate(['clinicLogin']);
   }
 
-  // test to return whether there's a current session
+  // Return whether there's a current session
   public validSession(): boolean {
     if (this.appSession.hasOwnProperty('token')) {
         return true;

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AppModule } from 'app/app.module';
-import { piClinicSession, sessionData, sessionInfo as currentSessionInfo, activeSessionInfo } from '../api/session.service';
+import { piClinicSession, sessionData, sessionInfo, activeSessionInfo } from '../api/session.service';
 import { PiClinicErrorMessageComponent } from '../pi-clinic-error-message/pi-clinic-error-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -18,7 +18,6 @@ export class PiClinicLoginComponent implements OnInit {
   @Input() auth_user = "";
   @Input() auth_pass = "";
 
-  @Output() currentSession: currentSessionInfo;
   @Output() activeSession: activeSessionInfo;
   @Output() serviceError: HttpErrorResponse;
 
@@ -30,16 +29,14 @@ export class PiClinicLoginComponent implements OnInit {
     public app: AppModule
     )
     {
-      this.currentSession = <currentSessionInfo>{};
       this.activeSession = <activeSessionInfo>{};
       this.serviceError = <HttpErrorResponse>{};
       this.errorMessage = "";
     }
 
-  loginSuccess(sessionInfo: currentSessionInfo): void {
-    this.currentSession = sessionInfo;
+  loginSuccess(sessionInfo: sessionInfo): void {
     this.app.setSession (sessionInfo.data);
-    this.router.navigate(['clinicDash']);
+    // this.router.navigate(['clinicDash']);
   }
 
   loginUserError(err: HttpErrorResponse): void {
@@ -56,7 +53,7 @@ export class PiClinicLoginComponent implements OnInit {
   // Login user and create a new piClinic session
   loginUser(): void {
     var httpObserver = {
-      next: (data: currentSessionInfo) => this.loginSuccess(data),
+      next: (data: sessionInfo) => this.loginSuccess(data),
       error: (err: HttpErrorResponse) => this.loginUserError(err),
       complete: () => console.log ("showLogin call completed.")
     };
@@ -73,7 +70,7 @@ export class PiClinicLoginComponent implements OnInit {
       complete: () => console.log ("showSessionInfo call completed.")
     };
 
-    this.session.getSession (this.currentSession.data.token).
+    this.session.getSession (this.app.getSession().token).
       subscribe(httpObserver);
   }
 
@@ -83,19 +80,13 @@ export class PiClinicLoginComponent implements OnInit {
     var currentLang = '';
 
     // find the current session language
-    if (Object.keys(this.activeSession).length === 0) {
-      console.log("ChangeLanguage: No active session");
-      if (Object.keys(this.currentSession).length !== 0) {
-        console.log("ChangeLanguage: Use current session");
-        currentLang = this.currentSession.data.sessionLanguage;
-      } else {
-        console.log("ChangeLanguage: no session to change");
-        // there's no session to update so leave with no further action
-        return;
-      }
+    if (!this.app.validSession()) {
+      console.log("ChangeLanguage: no session to change");
+      // there's no session to update so leave with no further action
+      return;
     } else {
       console.log("ChangeLanguage: Use active session");
-      currentLang = this.activeSession.data.sessionLanguage;
+      currentLang = this.app.getSession().sessionLanguage;
     }
 
     // Switch to the other language (there's only two)
@@ -116,7 +107,7 @@ export class PiClinicLoginComponent implements OnInit {
 
     // call the piClinic API to update
     this.session.updateSession (
-      this.currentSession.data.token,
+      this.app.getSession().token,
       newLanguage).
       subscribe(httpObserver);
   }
@@ -124,9 +115,8 @@ export class PiClinicLoginComponent implements OnInit {
   logoutSuccess(
     closedSession: activeSessionInfo
   ) : void {
-    this.activeSession = closedSession;
-    this.currentSession = <currentSessionInfo>{};
     this.app.setSession (<sessionData>{});
+    this.activeSession = <activeSessionInfo>{};
   }
 
   // Log out the current user and delete their session
@@ -137,7 +127,7 @@ export class PiClinicLoginComponent implements OnInit {
       complete: () => console.log ("logoutSession call completed.")
     };
 
-    this.session.closeSession (this.currentSession.data.token).
+    this.session.closeSession (this.app.getSession().token).
       subscribe(httpObserver);
   }
 
