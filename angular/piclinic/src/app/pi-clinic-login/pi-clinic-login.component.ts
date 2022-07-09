@@ -30,6 +30,9 @@ export class PiClinicLoginComponent implements OnInit {
     )
     {
       this.activeSession = <activeSessionResponse>{};
+      if (app.validSession()) {
+        this.navigateToNextPage();
+      }
       this.serviceError = <HttpErrorResponse>{};
       this.errorMessage = "";
     }

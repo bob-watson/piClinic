@@ -1,5 +1,5 @@
 <app-pi-clinic-error-message [errorMessageText]="errorMessage"></app-pi-clinic-error-message>
-<div id="loginDiv">
+<div id="loginDiv" [ngClass]="{ 'noshow': app.validSession() }" >
   <h1 class="piClinicPageTitle">Clinic login</h1>
   <p>
     <label class="piClinicFieldLabel" for="login_user">Username</label><br>

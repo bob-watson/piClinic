@@ -3,9 +3,9 @@
     <p>Logged in as:
       {{app.getSession().username}}
       <span [innerHTML]=itemSeparator></span>
-      <a href="" (click)="editUser()">{{userEditPrompt}}</a>
+      <a (click)="editUser()">{{userEditPrompt}}</a>
       <span [innerHTML]=itemSeparator></span>
-      <a href="" (click)="logoutUser()">{{logoutLink}}</a>
+      <a (click)="logoutUser()">{{logoutLink}}</a>
     </p>
   </div>
 </div>
