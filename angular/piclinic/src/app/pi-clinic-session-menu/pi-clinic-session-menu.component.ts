@@ -15,14 +15,23 @@ export class PiClinicSessionMenuComponent implements OnInit {
   @Output() itemSeparator = '&nbsp;&nbsp;|&nbsp;&nbsp;';
   @Output() userEditPrompt = 'User settings';
   @Output() logoutLink = 'Logout';
+  @Output() otherLanguage = '';
 
   constructor(
     public app: AppModule,
     private router: Router,
     private session: piClinicSession
-  ) { }
+  ) {
+    this.otherLanguage = this.app.getLanguageDisplayName(this.app.getSession().sessionLanguage);
+  }
 
-  editUser(){
+  changeLanguage() : void {
+    var thisLang = this.app.getSession().sessionLanguage;
+    this.app.updateSessionLanguage(this.app.getOtherLanguage(thisLang));
+    this.otherLanguage = this.app.getLanguageDisplayName(this.app.getSession().sessionLanguage);
+  }
+
+  editUser() : void {
     alert('Edit user profile for:\n' + this.app.getSession().username);
   }
 

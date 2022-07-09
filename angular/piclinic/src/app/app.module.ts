@@ -35,6 +35,8 @@ import { Router } from '@angular/router';
   ],
   bootstrap: [AppComponent]
 })
+
+
 export class AppModule {
   private appSession: sessionData;
 
@@ -52,6 +54,22 @@ export class AppModule {
     newSession: sessionData
   ) : void {
     this.appSession = newSession;
+  }
+
+  public getLanguageDisplayName (thisLang: string) : string {
+    switch (thisLang) {
+      case 'en': return 'English';
+      case 'es': return 'Spanish';
+      default: return 'Unknown';
+    }
+  }
+
+  public getOtherLanguage( thisLang: string) : string {
+    if (thisLang === 'en') {
+      return 'es';
+    } else {
+      return 'en';
+    }
   }
 
   public updateSessionLanguage(
