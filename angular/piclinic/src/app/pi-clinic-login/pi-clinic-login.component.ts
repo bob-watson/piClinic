@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo } from '../api/session.service';
-import { PiClinicErrorMessageComponent } from '../pi-clinic-error-message/pi-clinic-error-message.component';
+import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo, activeSessionData } from '../api/session.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AppRoutingModule } from '../../app/app-routing.module';
 import { NavigationEnd } from '@angular/router';
+import { LocalStoreService } from 'app/local-store.service';
 
 @Component({
   selector: 'app-pi-clinic-login',
@@ -12,6 +12,9 @@ import { NavigationEnd } from '@angular/router';
   styleUrls: ['./pi-clinic-login.component.css']
 })
 export class PiClinicLoginComponent implements OnInit {
+
+  // local storage keys
+  private piClinicSessionKey = "piClinicSession";
 
   // UI properties
   @Input() auth_user = "";
@@ -25,18 +28,46 @@ export class PiClinicLoginComponent implements OnInit {
 
   constructor(
     private session: piClinicSession,
-    private router: Router
+    private router: Router,
+    private localStore: LocalStoreService
     )
     {
       this.currentSession = <currentSessionInfo>{};
       this.activeSession = <activeSessionInfo>{};
       this.serviceError = <HttpErrorResponse>{};
       this.errorMessage = "";
+      // initialize the active session info
+      this.getActiveSessionFromStore();
     }
 
+  getActiveSessionFromStore () {
+    // returns a valid session token from the local store
+    //  or an empty string if the local store has no valid token
+    let localSessionToken = this.localStore.getData(this.piClinicSessionKey);
+
+    if (localSessionToken !== null) {
+      var httpObserver = {
+        next: (data: activeSessionInfo) => this.activeSession = data,
+        error: (err: HttpErrorResponse) => this.serviceError = err,
+        complete: () => console.log ("getSessionInfo call completed.")
+      };
+
+      this.session.getSession (localSessionToken).
+        subscribe(httpObserver);
+    } else {
+      this.resetSessionData(<activeSessionInfo>{});
+    }
+  }
+
   loginSuccess(data: currentSessionInfo): void {
+    // save session token and and update active session info
     this.currentSession = data;
-    this.router.navigate(['clinicDash']);
+    this.localStore.saveData(this.piClinicSessionKey, this.currentSession.data.token);
+
+    // get active session info
+    this.getActiveSessionFromStore ();
+
+    // this.router.navigate(['clinicDash']);
   }
 
   loginUserError(err: HttpErrorResponse): void {
@@ -70,7 +101,7 @@ export class PiClinicLoginComponent implements OnInit {
       complete: () => console.log ("showSessionInfo call completed.")
     };
 
-    this.session.getSession (this.currentSession.data.token).
+    this.session.getSession (this.activeSession.data.token).
       subscribe(httpObserver);
   }
 
@@ -82,9 +113,9 @@ export class PiClinicLoginComponent implements OnInit {
     // find the current session language
     if (Object.keys(this.activeSession).length === 0) {
       console.log("ChangeLanguage: No active session");
-      if (Object.keys(this.currentSession).length !== 0) {
+      if (Object.keys(this.activeSession).length !== 0) {
         console.log("ChangeLanguage: Use current session");
-        currentLang = this.currentSession.data.sessionLanguage;
+        currentLang = this.activeSession.data.sessionLanguage;
       } else {
         console.log("ChangeLanguage: no session to change");
         // there's no session to update so leave with no further action
@@ -113,27 +144,34 @@ export class PiClinicLoginComponent implements OnInit {
 
     // call the piClinic API to update
     this.session.updateSession (
-      this.currentSession.data.token,
+      this.activeSession.data.token,
       newLanguage).
       subscribe(httpObserver);
+  }
+
+  resetSessionData(data: activeSessionInfo) {
+    // clean up session info after session has been closed.
+    this.activeSession = data;
+    this.currentSession = <currentSessionInfo>{};
+    this.localStore.removeData(this.piClinicSessionKey);
   }
 
   // Log out the current user and delete their session
   logoutUser(): void {
     var httpObserver = {
-      next: (data: activeSessionInfo) => {this.activeSession = data; this.currentSession = <currentSessionInfo>{}; },
+      next: (data: activeSessionInfo) => this.resetSessionData(data),
       error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("logoutSession call completed.")
     };
 
-    this.session.closeSession (this.currentSession.data.token).
+    this.session.closeSession (this.activeSession.data.token).
       subscribe(httpObserver);
   }
 
   // test to return whether there's a current session
   validSession(): boolean {
-    if (this.currentSession.hasOwnProperty('data')) {
-        if (this.currentSession.data.hasOwnProperty('token')) {
+    if (this.activeSession.hasOwnProperty('data')) {
+        if (this.activeSession.data.hasOwnProperty('token')) {
           return true;
         } else {
           return false;

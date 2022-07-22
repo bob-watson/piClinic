@@ -1,5 +1,6 @@
 <app-pi-clinic-error-message [errorMessageText]="errorMessage"></app-pi-clinic-error-message>
-<div id="loginDiv">
+<div id="localSessionInfo"><p>You are <span [ngClass]="{ 'noshow': validSession() }">not</span> logged in.</p></div>
+<div id="loginDiv" [ngClass]="{ 'noshow': validSession() }" style="clear: both;">
   <h1 class="piClinicPageTitle">Clinic login</h1>
   <p>
     <label class="piClinicFieldLabel" for="login_user">Username</label><br>
