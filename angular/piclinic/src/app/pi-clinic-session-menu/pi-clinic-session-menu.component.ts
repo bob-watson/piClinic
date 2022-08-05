@@ -1,4 +1,5 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, Input} from '@angular/core';
+import { SessionManagerService } from 'app/session-manager.service';
 
 @Component({
   selector: 'app-pi-clinic-session-menu',
@@ -7,12 +8,21 @@ import { Component, OnInit, Output } from '@angular/core';
 })
 export class PiClinicSessionMenuComponent implements OnInit {
 
+  // UI properties
+  @Input() auth_user = "";
+  @Input() auth_pass = "";
+
+
   @Output() username = 'noUser';
   @Output() itemSeparator = '&nbsp;&nbsp;|&nbsp;&nbsp;';
   @Output() userEditPrompt = 'User settings';
   @Output() logoutLink = 'Logout';
 
-  constructor() { }
+  constructor(
+    public sessionMgr: SessionManagerService
+  ) {
+
+  }
 
   ngOnInit(): void {
   }

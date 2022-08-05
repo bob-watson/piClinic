@@ -2,9 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PiClinicLoginComponent } from './pi-clinic-login/pi-clinic-login.component';
 import { PiClinicDashComponent } from './pi-clinic-dash/pi-clinic-dash.component';
+import { PiClinicHeaderComponent } from './pi-clinic-header/pi-clinic-header.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'https://piclinic.org/', pathMatch: 'full'},
+  /*
+  {
+    path: '',
+    title: 'Clinic login - piClinic'
+  },
+  */
   {
     path: 'clinicLogin',
     title: 'Clinic login - piClinic',

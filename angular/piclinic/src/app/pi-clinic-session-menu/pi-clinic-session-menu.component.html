@@ -1,11 +1,22 @@
 <div id="sessionMenu" class="noprint">
-  <div id="sessionDiv" class="noprint">
+  <div id="sessionDiv-LoggedIn" [ngClass]="{ 'noshow': !sessionMgr.validSession() }" style="clear: both;">
     <p>Logged in as:
       {{username}}
       <span [innerHTML]=itemSeparator></span>
       <a href="#">{{userEditPrompt}}</a>
       <span [innerHTML]=itemSeparator></span>
-      <a href="#">{{logoutLink}}</a>
+      <a href="clinicLogin" onclick="sessionMgr.logoutUser()">{{logoutLink}}</a>
     </p>
   </div>
+  <div id="sessionDiv-LoggedOut" [ngClass]="{ 'noshow': sessionMgr.validSession() }" style="clear: both;">
+    <p>
+      <label class="piClinicFieldLabel" for="login_user">Username</label>:&nbsp;
+      <input class="piClinicEdit" id="login_user" [(ngModel)] = "auth_user" placeholder="Username">
+      &nbsp;
+      <label class="piClinicFieldLabel" for="login_pass">Password</label>:&nbsp;
+      <input class="piClinicEdit" id="login_pass" type="password"  [(ngModel)]= "auth_pass" placeholder="Password">
+      &nbsp;
+      <button type="submit" (click)="sessionMgr.loginUser(this.auth_user, this.auth_pass)">Login</button>
+    </p>
+    </div>
 </div>

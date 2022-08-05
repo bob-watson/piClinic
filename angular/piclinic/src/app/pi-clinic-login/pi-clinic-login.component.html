@@ -1,34 +1,4 @@
 <app-pi-clinic-error-message [errorMessageText]="errorMessage"></app-pi-clinic-error-message>
-<div id="localSessionInfo"><p>You are <span [ngClass]="{ 'noshow': validSession() }">not</span> logged in.</p></div>
-<div id="loginDiv" [ngClass]="{ 'noshow': validSession() }" style="clear: both;">
+<div id="loginDiv" style="clear: both;">
   <h1 class="piClinicPageTitle">Clinic login</h1>
-  <p>
-    <label class="piClinicFieldLabel" for="login_user">Username</label><br>
-    <input class="piClinicEdit" id="login_user" [(ngModel)] = "auth_user" placeholder="Username">
-  </p>
-  <p>
-    <label class="piClinicFieldLabel" for="login_pass">Password</label><br>
-    <input class="piClinicEdit" id="login_pass" type="password"  [(ngModel)]= "auth_pass" placeholder="Password">
-  </p>
-  <p class="piClinicButton">
-    <button type="submit" (click)="loginUser()">Login</button>
-  </p>
-</div>
-<div id="debugDiv">
-  <div style="clear: both;">
-    <h2>Login response</h2>
-    <pre style="font-family: monospace">Response: {{currentSession | json}}</pre>
-  </div>
-  <div [ngClass]="{ 'noshow': !validSession() }" style="clear: both;">
-    <h2>Updates</h2>
-    <button (click)="showSessionInfo()">Show session info</button>&nbsp;
-    <button (click)="changeSessionLanguage()">Change session language</button>&nbsp;
-    <button (click)="logoutUser()">Logout</button>
-    <pre style="font-family: monospace">Response: {{activeSession | json}}</pre>
-  </div>
-  <div>
-    <h2>Last error</h2>
-    <button [ngClass]="{ 'noshow': !errorDataPresent() }" (click)="clearLastError()">Clear error</button>
-    <pre style="font-family: monospace">Error: {{serviceError | json}}</pre>
-  </div>
 </div>
