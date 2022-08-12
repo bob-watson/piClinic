@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-pi-clinic-session-menu',
@@ -11,6 +11,7 @@ export class PiClinicSessionMenuComponent implements OnInit {
   @Output() itemSeparator = '&nbsp;&nbsp;|&nbsp;&nbsp;';
   @Output() userEditPrompt = 'User settings';
   @Output() logoutLink = 'Logout';
+  @Input()  showComponent = true;
 
   constructor() { }
 
