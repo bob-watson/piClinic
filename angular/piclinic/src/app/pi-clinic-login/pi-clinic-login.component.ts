@@ -36,7 +36,7 @@ export class PiClinicLoginComponent implements OnInit {
 
   loginSuccess(data: currentSessionInfo): void {
     this.currentSession = data;
-    this.router.navigate(['clinicDash']);
+    // this.router.navigate(['clinicDash']);
   }
 
   loginUserError(err: HttpErrorResponse): void {
