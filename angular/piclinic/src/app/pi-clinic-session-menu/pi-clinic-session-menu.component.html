@@ -5,7 +5,7 @@
       <span [innerHTML]=itemSeparator></span>
       <a href="#">{{userEditPrompt}}</a>
       <span [innerHTML]=itemSeparator></span>
-      <a href="#">{{logoutLink}}</a>
+      <a (click)="logoutUser()">{{logoutLink}}</a>
     </p>
   </div>
 </div>

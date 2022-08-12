@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo } from '../api/session.service';
+import { piClinicSession, sessionInfo as currentSessionInfo, activeSessionInfo, activeSessionData } from '../api/session.service';
 import { PiClinicErrorMessageComponent } from '../pi-clinic-error-message/pi-clinic-error-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { LocalStoreService } from 'app/local-storage.service';
 import { AppRoutingModule } from '../../app/app-routing.module';
 import { NavigationEnd } from '@angular/router';
 
@@ -18,26 +19,48 @@ export class PiClinicLoginComponent implements OnInit {
   @Input() auth_pass = "";
 
   @Output() currentSession: currentSessionInfo;
-  @Output() activeSession: activeSessionInfo;
+  @Output() activeSession: activeSessionData;
   @Output() serviceError: HttpErrorResponse;
 
   @Output() errorMessage: string;
 
   constructor(
     private session: piClinicSession,
-    private error: PiClinicErrorMessageComponent,
-    private router: Router
+    private router: Router,
+    private localStore: LocalStoreService,
     )
     {
       this.currentSession = <currentSessionInfo>{};
-      this.activeSession = <activeSessionInfo>{};
+      this.activeSession = <activeSessionData>{};
       this.serviceError = <HttpErrorResponse>{};
       this.errorMessage = "";
+      this.clearOpenSessions();
     }
 
-  loginSuccess(data: currentSessionInfo): void {
+  clearOpenSessions(): void {
+    let tempActiveSession = <activeSessionData>{};
+    tempActiveSession = this.getLocalSessionInfo();
+  }
+
+  // Get current session data
+  getLocalSessionInfo(): activeSessionData {
+    return JSON.parse(this.localStore.getData('piClinicSession'));
+  }
+
+
+  loginUserSuccess(data: currentSessionInfo): void {
     this.currentSession = data;
-//    this.router.navigate(['clinicDash']);
+    let activeSession = <activeSessionData>{};
+
+    activeSession.accessGranted = this.currentSession.data.accessGranted;
+    activeSession.sessionClinicPublicID = this.currentSession.data.sessionClinicPublicID;
+    activeSession.sessionLanguage = this.currentSession.data.sessionLanguage;
+    activeSession.token = this.currentSession.data.token;
+    activeSession.username = this.currentSession.data.username;
+
+    this.localStore.saveData('piClinicSession', JSON.stringify(activeSession));
+
+    this.router.navigate(['clinicDash']);
   }
 
   loginUserError(err: HttpErrorResponse): void {
@@ -53,8 +76,8 @@ export class PiClinicLoginComponent implements OnInit {
 
   // Login user and create a new piClinic session
   loginUser(): void {
-    var httpObserver = {
-      next: (data: currentSessionInfo) => this.loginSuccess(data),
+    let httpObserver = {
+      next: (data: currentSessionInfo) => this.loginUserSuccess(data),
       error: (err: HttpErrorResponse) => this.loginUserError(err),
       complete: () => console.log ("showLogin call completed.")
     };
@@ -65,8 +88,8 @@ export class PiClinicLoginComponent implements OnInit {
 
   // Get current session data
   showSessionInfo(): void {
-    var httpObserver = {
-      next: (data: activeSessionInfo) => this.activeSession = data,
+    let httpObserver = {
+      next: (data: activeSessionInfo) => this.activeSession = data.data,
       error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("showSessionInfo call completed.")
     };
@@ -77,8 +100,8 @@ export class PiClinicLoginComponent implements OnInit {
 
   // Change the session UI language
   changeSessionLanguage(): void {
-    var newLanguage = 'en';
-    var currentLang = '';
+    let newLanguage = 'en';
+    let currentLang = '';
 
     // find the current session language
     if (Object.keys(this.activeSession).length === 0) {
@@ -93,7 +116,7 @@ export class PiClinicLoginComponent implements OnInit {
       }
     } else {
       console.log("ChangeLanguage: Use active session");
-      currentLang = this.activeSession.data.sessionLanguage;
+      currentLang = this.activeSession.sessionLanguage;
     }
 
     // Switch to the other language (there's only two)
@@ -106,8 +129,8 @@ export class PiClinicLoginComponent implements OnInit {
     }
 
     // prepare the Observer
-    var httpObserver = {
-      next: (data: activeSessionInfo) => this.activeSession = data,
+    let httpObserver = {
+      next: (data: activeSessionInfo) => this.activeSession = data.data,
       error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("changeSessionLanguage call completed.")
     };
@@ -119,15 +142,23 @@ export class PiClinicLoginComponent implements OnInit {
       subscribe(httpObserver);
   }
 
+  // Reset the session data to show the closed session
+  logoutSuccess(activeSession: activeSessionInfo) {
+    this.activeSession = <activeSessionData>{};
+    this.localStore.removeData('piClinicSession');
+    this.router.navigate(['clinicLogin']);
+  }
+
   // Log out the current user and delete their session
   logoutUser(): void {
-    var httpObserver = {
-      next: (data: activeSessionInfo) => {this.activeSession = data; this.currentSession = <currentSessionInfo>{}; },
+    let token = this.activeSession.token;
+    let httpObserver = {
+      next: (data: activeSessionInfo) => {this.logoutSuccess(data)},
       error: (err: HttpErrorResponse) => this.serviceError = err,
       complete: () => console.log ("logoutSession call completed.")
     };
 
-    this.session.closeSession (this.currentSession.data.token).
+    this.session.closeSession (token).
       subscribe(httpObserver);
   }
 
