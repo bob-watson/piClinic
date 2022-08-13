@@ -69,3 +69,11 @@ li.separated {
   padding-top: 12px;
   border-top: 1px solid #777;
 }
+
+a.nolink {
+  cursor: default;
+  pointer-events: none;
+  text-decoration: none;
+  color: #000;
+}
+

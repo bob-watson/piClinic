@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-pi-clinic-app-menu',
@@ -7,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PiClinicAppMenuComponent implements OnInit {
 
-  constructor() { }
+  @Input()  currentPage: string;
+
+  constructor() {
+    this.currentPage = "";
+  }
 
   ngOnInit(): void {
   }

@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { PiClinicDashComponent } from './pi-clinic-dash/pi-clinic-dash.component';
 import { PiClinicErrorMessageComponent } from './pi-clinic-error-message/pi-clinic-error-message.component';
 import { PiClinicAppMenuComponent } from './pi-clinic-app-menu/pi-clinic-app-menu.component';
+import { PiClinicUserSettingsComponent } from './pi-clinic-user-settings/pi-clinic-user-settings.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PiClinicAppMenuComponent } from './pi-clinic-app-menu/pi-clinic-app-men
     PiClinicLoginComponent,
     PiClinicDashComponent,
     PiClinicErrorMessageComponent,
-    PiClinicAppMenuComponent
+    PiClinicAppMenuComponent,
+    PiClinicUserSettingsComponent
   ],
   imports: [
     BrowserModule,
