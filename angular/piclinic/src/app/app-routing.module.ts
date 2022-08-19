@@ -5,7 +5,11 @@ import { PiClinicDashComponent } from './pi-clinic-dash/pi-clinic-dash.component
 import { PiClinicUserSettingsComponent } from './pi-clinic-user-settings/pi-clinic-user-settings.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'https://piclinic.org/', pathMatch: 'full'},
+  {
+    path: '',
+    redirectTo: 'clinicLogin',
+    pathMatch: 'full'
+  },
   {
     path: 'clinicLogin',
     title: 'Clinic login - piClinic',

@@ -18,6 +18,7 @@ div#sessionMenu p {
 div#sessionMenu a {
   color: #FFF;
   text-decoration: none;
+  cursor: pointer;
 }
 div#sessionMenu a:link {
   color: #FFF;

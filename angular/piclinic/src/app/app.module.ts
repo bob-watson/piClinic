@@ -32,7 +32,8 @@ import { PiClinicUserSettingsComponent } from './pi-clinic-user-settings/pi-clin
     AppRoutingModule
   ],
   providers: [
-    piClinicSession
+    piClinicSession,
+    PiClinicSessionMenuComponent
   ],
   bootstrap: [AppComponent]
 })

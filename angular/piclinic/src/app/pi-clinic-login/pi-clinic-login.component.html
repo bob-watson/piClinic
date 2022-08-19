@@ -19,13 +19,14 @@
   <div style="clear: both;">
     <h2>Login response</h2>
     <pre style="font-family: monospace">Response: {{currentSession | json}}</pre>
+    <button (click)="continueToDash()">Continue to ClinicDash</button>
   </div>
-  <div [ngClass]="{ 'noshow': !validSession() }" style="clear: both;">
+  <div [ngClass]="{ 'noshow': !sessionMenu.validSession() }" style="clear: both;">
     <h2>Updates</h2>
-    <button (click)="showSessionInfo()">Show session info</button>&nbsp;
-    <button (click)="changeSessionLanguage()">Change session language</button>&nbsp;
-    <button (click)="logoutUser()">Logout</button>
-    <pre style="font-family: monospace">Response: {{activeSession | json}}</pre>
+<!--    <button (click)="sessionMenu.showSessionInfo()">Show session info</button>&nbsp; -->
+    <button (click)="sessionMenu.changeSessionLanguage()">Change session language</button>&nbsp;
+    <button (click)="sessionMenu.logoutUser()">Logout</button>
+    <pre style="font-family: monospace">Response: {{sessionMenu.activeSession | json}}</pre>
   </div>
   <div>
     <h2>Last error</h2>

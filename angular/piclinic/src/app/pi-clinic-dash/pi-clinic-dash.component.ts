@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PiClinicSessionMenuComponent } from 'app/pi-clinic-session-menu/pi-clinic-session-menu.component';
 import { PiClinicAppMenuComponent } from '../pi-clinic-app-menu/pi-clinic-app-menu.component';
 
 @Component({
@@ -8,7 +9,9 @@ import { PiClinicAppMenuComponent } from '../pi-clinic-app-menu/pi-clinic-app-me
 })
 export class PiClinicDashComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public sessionMenu: PiClinicSessionMenuComponent
+  ) { }
 
   ngOnInit(): void {
   }

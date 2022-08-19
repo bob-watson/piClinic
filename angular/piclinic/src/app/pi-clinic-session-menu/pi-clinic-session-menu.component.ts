@@ -19,10 +19,11 @@ export class PiClinicSessionMenuComponent implements OnInit {
 
   @Input()  showComponent = true;
 
-  @Output() activeSession: activeSessionData;
-  @Output() serviceError: HttpErrorResponse;
+  public activeSession = <activeSessionData>{};
+  public serviceError = <HttpErrorResponse>{};
+  public errorMessage = "";
 
-  @Output() errorMessage: string;
+  private remainingAttempts = 0;
 
   constructor(
     private session: piClinicSession,
@@ -30,19 +31,17 @@ export class PiClinicSessionMenuComponent implements OnInit {
     private localStore: LocalStoreService,
   )
   {
-    this.activeSession = <activeSessionData>{};
-    this.serviceError = <HttpErrorResponse>{};
-    this.errorMessage = "";
+    this.getLocalSessionData();   //initialize activeSession
     this.loadComponentProperties();
   }
 
   // Get current session data
-  getLocalSessionInfo(): activeSessionData {
-    return JSON.parse(this.localStore.getData('piClinicSession'));
+  getLocalSessionData(): void {
+    this.getActiveSessionFromStorage(10);
   }
 
+  // load properties used by this component
   loadComponentProperties(): void {
-    this.activeSession = this.getLocalSessionInfo();   //initialize activeSession
     if (this.activeSession != null) {
       if (this.activeSession.hasOwnProperty('username')) {
         this.username = this.activeSession.username;
@@ -95,7 +94,14 @@ export class PiClinicSessionMenuComponent implements OnInit {
   }
 
   // Reset the session data to show the closed session
-  logoutSuccess(activeSession: activeSessionData) {
+  logoutSuccess(activeSession: activeSessionData) : void {
+    this.activeSession = <activeSessionData>{};
+    this.localStore.removeData('piClinicSession');
+    this.router.navigate(['clinicLogin']);
+  }
+
+  logoutError(err: HttpErrorResponse) : void {
+    console.log('session-menu: logout error');
     this.activeSession = <activeSessionData>{};
     this.localStore.removeData('piClinicSession');
     this.router.navigate(['clinicLogin']);
@@ -103,21 +109,54 @@ export class PiClinicSessionMenuComponent implements OnInit {
 
   // Log out the current user and delete their session
   logoutUser(): void {
-    let token = this.activeSession.token;
-    let httpObserver = {
-      next: (data: activeSessionInfo) => {this.logoutSuccess(data.data)},
-      error: (err: HttpErrorResponse) => this.serviceError = err,
-      complete: () => console.log ("logoutSession call completed.")
-    };
-
-    this.session.closeSession (token).
+    if (this.activeSession !== null) {
+      let token = this.activeSession.token;
+      let httpObserver = {
+        next: (data: activeSessionInfo) => {this.logoutSuccess(data.data)},
+        error: (err: HttpErrorResponse) => this.serviceError = err,
+        complete: () => console.log ("logoutSession call completed.")
+      };
+      this.session.closeSession (token).
       subscribe(httpObserver);
+    }
+  }
+
+  // logout any existing sessions and clear the local storage variable
+  clearOpenSessions(): void {
+    this.logoutUser();
+    let tempActiveSession = this.getLocalSessionData();
+    console.log ('pi-clinic-session-menu: clearOpenSessions, activeSession = \n' + JSON.stringify(tempActiveSession));
+  }
+
+  private getActiveSessionFromStorageFunction(): void{
+    if (this.remainingAttempts > 0) {
+      let localActiveSession = JSON.parse(this.localStore.getData('piClinicSession'));
+      if (localActiveSession == null) {
+        this.remainingAttempts -= 1;
+        console.log ('retrieving active session...('+this.remainingAttempts.toString() + ')');
+        setTimeout(this.getActiveSessionFromStorageFunction, 100)
+      } else {
+        this.activeSession = localActiveSession;
+        this.remainingAttempts = 0;
+        console.log ('retrieving active session...retrieved!');
+      }
+    }
+  }
+
+  getActiveSessionFromStorage(tries: number) {
+    this.remainingAttempts = tries;
+    this.getActiveSessionFromStorageFunction();
   }
 
   // test to return whether there's a current session
   validSession(): boolean {
-    if (this.activeSession.hasOwnProperty('token')) {
+    console.log('validSession: \n'+JSON.stringify(this.activeSession))
+    if (this.activeSession !== null) {
+      if (this.activeSession.hasOwnProperty('token')) {
         return true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
@@ -134,7 +173,6 @@ export class PiClinicSessionMenuComponent implements OnInit {
   clearLastError(): void {
     this.serviceError = <HttpErrorResponse>{};
   }
-
 
   ngOnInit(): void {
   }
